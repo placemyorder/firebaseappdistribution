@@ -28,17 +28,32 @@ const exec = (cmd, args = []) =>
         app.on('error', reject);
     });
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 (async () => {
-    try {
-        const args = [path.join(__dirname, './entrypoint.sh')];
+    const maxRetries = 3;
+    let attempt = 0;
 
-        Object.entries(inputs).forEach(([key, value]) => {
-            if (value) args.push(`--${key}`, value);
-        });
+    const args = [path.join(__dirname, './entrypoint.sh')];
+    Object.entries(inputs).forEach(([key, value]) => {
+        if (value) args.push(`--${key}`, value);
+    });
 
-        await exec('bash', args);
-    } catch (err) {
-        console.error(err);
-        process.exit(err.code || 1);
+    while (attempt < maxRetries) {
+        try {
+            attempt++;
+            console.log(`Attempt ${attempt} of ${maxRetries}`);
+            await exec('bash', args);
+            console.log('Command succeeded');
+            break;
+        } catch (err) {
+            console.error(`Attempt ${attempt} failed with error:`, err.message);
+            if (attempt >= maxRetries) {
+                console.error('Max retry attempts reached. Exiting.');
+                process.exit(err.code || 1);
+            }
+            console.log('Retrying in 5 seconds...');
+            await sleep(5000);
+        }
     }
 })();
