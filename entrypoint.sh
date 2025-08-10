@@ -74,4 +74,16 @@ fi
 
 # Run command
 echo "Running: ${cmd[*]}"
-"${cmd[@]}"
+max_retries=3
+count=0
+until "${cmd[@]}"; do
+  exit_code=$?
+  count=$((count + 1))
+  if [ $count -lt $max_retries ]; then
+    echo "Command failed with exit code $exit_code. Retrying $count/$max_retries in 5 seconds..."
+    sleep 5
+  else
+    echo "Command failed after $count attempts. Exiting."
+    exit $exit_code
+  fi
+done
