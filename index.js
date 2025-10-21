@@ -6,7 +6,6 @@ const inputs = {
     appPath: core.getInput('appPath', { trimWhitespace: false }),
     appId: core.getInput('appId'),
     credentialFileContent: core.getInput('credentialFileContent', { trimWhitespace: false }),
-    firebaseToken: core.getInput('firebaseToken'),
     groups: core.getInput('groups'),
     releaseNotes: core.getInput('releaseNotes', { trimWhitespace: false }),
     releaseNotesFile: core.getInput('releaseNotesFile'),

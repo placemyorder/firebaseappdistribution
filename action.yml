@@ -10,8 +10,6 @@ inputs:
     required: true
   credentialFileContent:
     description: 'Service credentials file'
-  firebaseToken:
-    description: 'Upload token - see Firebase CLI Reference'
   groups:
     description: 'Distribution groups'
   releaseNotes:

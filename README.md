@@ -1,21 +1,20 @@
 # FirebaseAppDistribution
 Used to distribute an apk, aab or ipa via Firebase App Distribution. This was initially uploadtofirebase.ps1. And later converted to an action.
 
-A lot of the documentation here is referenced from https://github.com/wzieba/Firebase-Distribution-Github-Action
+## Key Difference from wzieba/Firebase-Distribution-Github-Action
+
+This action is based on [wzieba/Firebase-Distribution-Github-Action](https://github.com/wzieba/Firebase-Distribution-Github-Action) but **does not use Docker**. Instead, it runs as a JavaScript action directly on the runner, which provides:
+- Faster execution (no Docker image pull/build overhead)
+- Better compatibility with all runner types (including Windows and macOS)
+- Lower resource usage
+
+Much of the documentation below is referenced from the original action
 
 ## Inputs
 
 ### `appId`
 
 **Required** App id can be found in the Firebase console in your Projects Settings, under Your apps. It is in the following format 1:1234567890123942955466829:android:1234567890abc123abc123
-
-### `firebaseToken`
-
-⚠️ Deprecated! Don't use it. Firebase team deprecated this option and it will soon be removed.
-
-Use `credentialFileContent` instead. [Learn here how to generate one](https://github.com/wzieba/Firebase-Distribution-Github-Action/wiki/FIREBASE_TOKEN-migration).
-
-~**Required** Upload token - see Firebase CLI Reference (tldr; run `firebase login:ci` command to get your token).~
 
 ### `credentialFileContent`
 **Required** Content of Service Credentials private key JSON file. [Learn here how to generate one](https://github.com/wzieba/Firebase-Distribution-Github-Action/wiki/FIREBASE_TOKEN-migration).

@@ -18,7 +18,6 @@ fi
 appPath=""
 appId=""
 credentialFileContent=""
-firebaseToken=""
 groups=""
 releaseNotes=""
 releaseNotesFile=""
@@ -29,7 +28,6 @@ while [[ $# -gt 0 ]]; do
         --appPath) appPath="$2"; shift 2 ;;
         --appId) appId="$2"; shift 2 ;;
         --credentialFileContent) credentialFileContent="$2"; shift 2 ;;
-        --firebaseToken) firebaseToken="$2"; shift 2 ;;
         --groups) groups="$2"; shift 2 ;;
         --releaseNotes) releaseNotes="$2"; shift 2 ;;
         --releaseNotesFile) releaseNotesFile="$2"; shift 2 ;;
@@ -44,8 +42,8 @@ if [[ -z "$appPath" || -z "$appId" ]]; then
 fi
 
 # Require credentials
-if [[ -z "$credentialFileContent" && -z "$firebaseToken" ]]; then
-    echo "Either --credentialFileContent or --firebaseToken must be provided."
+if [[ -z "$credentialFileContent" ]]; then
+    echo "--credentialFileContent must be provided."
     exit 1
 fi
 
@@ -57,20 +55,15 @@ cmd=(firebase appdistribution:distribute "$appPath" --app "$appId")
 [[ -n "$releaseNotesFile" ]] && cmd+=(--release-notes-file "$releaseNotesFile")
 [[ -n "$testers" ]] && cmd+=(--testers "$testers")
 
-if [[ -n "$firebaseToken" ]]; then
-    echo "Warning: Using --firebaseToken is deprecated; prefer --credentialFileContent."
-    cmd+=(--token "$firebaseToken")
+# Write credentials file — detect if it's base64 and decode
+if echo "$credentialFileContent" | grep -q "{"; then
+    # Looks like JSON
+    echo "$credentialFileContent" > ./service_credentials_content.json
 else
-    # Write credentials file — detect if it's base64 and decode
-    if echo "$credentialFileContent" | grep -q "{"; then
-        # Looks like JSON
-        echo "$credentialFileContent" > ./service_credentials_content.json
-    else
-        # Assume base64 encoded
-        echo "$credentialFileContent" | base64 --decode > ./service_credentials_content.json
-    fi
-    export GOOGLE_APPLICATION_CREDENTIALS="./service_credentials_content.json"
+    # Assume base64 encoded
+    echo "$credentialFileContent" | base64 --decode > ./service_credentials_content.json
 fi
+export GOOGLE_APPLICATION_CREDENTIALS="./service_credentials_content.json"
 
 # Run command
 echo "Running: ${cmd[*]}"
