@@ -1,4 +1,4 @@
-# FirebaseAppDistribution
+# FirebaseAppDistribution(Non Docker)
 Used to distribute an apk, aab or ipa via Firebase App Distribution. This was initially uploadtofirebase.ps1. And later converted to an action.
 
 ## Key Difference from wzieba/Firebase-Distribution-Github-Action

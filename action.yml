@@ -1,4 +1,4 @@
-name: 'Firebase App Distribution'
+name: 'Firebase App Distribution(Non Docker)'
 author: 'Madhav Shenoy <@mshenoy83>'
 description: 'Deploy .apk.aab,.ipa to Firebase'
 inputs:
