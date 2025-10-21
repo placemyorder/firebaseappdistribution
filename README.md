@@ -5,7 +5,7 @@ Used to distribute an apk, aab or ipa via Firebase App Distribution. This was in
 
 This action is based on [wzieba/Firebase-Distribution-Github-Action](https://github.com/wzieba/Firebase-Distribution-Github-Action) but **does not use Docker**. Instead, it runs as a JavaScript action directly on the runner, which provides:
 - Faster execution (no Docker image pull/build overhead)
-- Better compatibility with all runner types (including Windows and macOS)
+- Runs natively on Linux and macOS runners - No Docker required
 - Lower resource usage
 
 Much of the documentation below is referenced from the original action
